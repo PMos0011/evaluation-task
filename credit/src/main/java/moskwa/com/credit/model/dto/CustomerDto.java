@@ -1,14 +1,12 @@
 package moskwa.com.credit.model.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Builder
 public class CustomerDto {
-    private String firstName;
-    private String surname;
-    private String pesel;
+    private final String firstName;
+    private final String surname;
+    private final String pesel;
 }

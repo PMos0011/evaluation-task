@@ -76,10 +76,40 @@ public class ProductControllerIT {
     }
 
     @Test
-    void shouldReturnUnprocessableWhenProductIsInvalid() throws Exception {
+    void shouldReturnUnprocessableWhenProductHasNoCreditId() throws Exception {
         ProductDto product = ProductDto.builder()
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
+                .build();
+
+        mockMvc.perform(post("/create-product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isUnprocessableEntity());
+
+        assertThat(productRepository.findAll().size()).isEqualTo(0L);
+    }
+
+    @Test
+    void shouldReturnUnprocessableWhenProductHasNoName() throws Exception {
+        ProductDto product = ProductDto.builder()
+                .creditId(1L)
+                .value(new BigDecimal(100))
+                .build();
+
+        mockMvc.perform(post("/create-product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isUnprocessableEntity());
+
+        assertThat(productRepository.findAll().size()).isEqualTo(0L);
+    }
+
+    @Test
+    void shouldReturnUnprocessableWhenProductHasNoValue() throws Exception {
+        ProductDto product = ProductDto.builder()
+                .creditId(1L)
+                .productName("Credit 1")
                 .build();
 
         mockMvc.perform(post("/create-product")

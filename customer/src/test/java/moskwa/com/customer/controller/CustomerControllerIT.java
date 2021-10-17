@@ -75,11 +75,61 @@ public class CustomerControllerIT {
     }
 
     @Test
-    void shouldReturnUnprocessableWhenCustomerIsInvalid() throws Exception {
+    void shouldReturnUnprocessableWhenCustomerHasNoCreditId() throws Exception {
+        CustomerDto customer = CustomerDto.builder()
+                .firstName("John")
+                .surname("Rambo")
+                .pesel("01234567890")
+                .build();
+
+        mockMvc.perform(post("/create-customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isUnprocessableEntity());
+
+        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+    }
+
+
+    @Test
+    void shouldReturnUnprocessableWhenCustomerHasNoFirstName() throws Exception {
         CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .surname("Rambo")
                 .pesel("01234567890")
+                .build();
+
+        mockMvc.perform(post("/create-customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isUnprocessableEntity());
+
+        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+    }
+
+    @Test
+    void shouldReturnUnprocessableWhenCustomerHasNoSurname() throws Exception {
+        CustomerDto customer = CustomerDto.builder()
+                .creditId(1L)
+                .firstName("John")
+                .pesel("01234567890")
+                .build();
+
+        mockMvc.perform(post("/create-customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isUnprocessableEntity());
+
+        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+    }
+
+    @Test
+    void shouldReturnUnprocessableWhenCustomerHasInvalidPESEL() throws Exception {
+        CustomerDto customer = CustomerDto.builder()
+                .creditId(1L)
+                .firstName("John")
+                .surname("Rambo")
+                .pesel("A1234567890")
                 .build();
 
         mockMvc.perform(post("/create-customer")

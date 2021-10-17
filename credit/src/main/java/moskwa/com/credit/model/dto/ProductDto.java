@@ -1,13 +1,13 @@
 package moskwa.com.credit.model.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.math.BigDecimal;
+
 @Getter
+@Builder
 public class ProductDto {
-    private String productName;
-    private int value;
+    private final String productName;
+    private final BigDecimal value;
 }
