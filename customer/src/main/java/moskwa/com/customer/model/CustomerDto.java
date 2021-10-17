@@ -3,7 +3,7 @@ package moskwa.com.customer.model;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -12,10 +12,11 @@ import javax.validation.constraints.Pattern;
 public class CustomerDto {
     @NotNull
     private final Long creditId;
-    @NotEmpty
+    @NotBlank
     private final String firstName;
-    @NotEmpty
+    @NotBlank
     private final String surname;
-    @Pattern(regexp="[\\d]{11}")
+    @NotNull
+    @Pattern(regexp = "[\\d]{11}")
     private final String pesel;
 }

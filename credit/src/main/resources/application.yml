@@ -1,4 +1,6 @@
 server-port: 37000
+customer-service-port: 37001
+product-service-port: 37002
 
 db-host: localhost
 db-port: 5432
@@ -32,3 +34,8 @@ spring:
             non_contextual_creation: true
     open-in-view: false
 
+
+connect-timeout: 10000
+read-timeout: 20000
+customer-service-url: http://localhost:${customer-service-port}
+product-service-url: http://localhost:${product-service-port}

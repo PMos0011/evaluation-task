@@ -1,12 +1,21 @@
 package moskwa.com.credit.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreditRequestDto {
-    private final CreditDto credit;
-    private final CustomerDto customer;
-    private final ProductDto product;
+    @NotNull
+    private CreditDto credit;
+    @NotNull
+    private CustomerDto customer;
+    @NotNull
+    private ProductDto product;
 }
