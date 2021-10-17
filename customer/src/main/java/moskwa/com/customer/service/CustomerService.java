@@ -2,12 +2,14 @@ package moskwa.com.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import moskwa.com.customer.model.Customer;
+import moskwa.com.customer.model.CustomerDto;
 import moskwa.com.customer.repository.CustomerRepository;
 import moskwa.com.customer.utils.CustomerValidation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static moskwa.com.customer.service.CustomerServiceFailure.CUSTOMER_EXISTS;
 import static moskwa.com.customer.service.CustomerServiceFailure.VALIDATION_FAILURE;
@@ -18,23 +20,26 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public Optional<CustomerServiceFailure> createCustomer(final Customer customerToAdd) {
+    public Optional<CustomerServiceFailure> createCustomer(final CustomerDto customerToAdd) {
         if (!CustomerValidation.validateCustomer(customerToAdd))
             return Optional.of(VALIDATION_FAILURE);
 
         return customerRepository.findById(customerToAdd.getCreditId())
                 .map(customer -> Optional.of(CUSTOMER_EXISTS))
                 .orElseGet(() -> {
-                    customerRepository.save(customerToAdd);
+                    customerRepository.save(Customer.fromDto(customerToAdd));
                     return Optional.empty();
                 });
     }
 
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDto> getCustomers() {
+        return customerRepository.findAll()
+                .stream()
+                .map(Customer::toDto)
+                .collect(Collectors.toList());
     }
 
-    public void revert(final Customer customer) {
-        customerRepository.delete(customer);
+    public void revert(final CustomerDto customer) {
+        customerRepository.delete(Customer.fromDto(customer));
     }
 }

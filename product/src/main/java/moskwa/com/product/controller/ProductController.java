@@ -1,7 +1,7 @@
 package moskwa.com.product.controller;
 
 import lombok.RequiredArgsConstructor;
-import moskwa.com.product.model.Product;
+import moskwa.com.product.model.ProductDto;
 import moskwa.com.product.service.ProductService;
 import moskwa.com.product.service.ProductServiceFailure;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,14 @@ public class ProductController {
     );
 
     @PostMapping("/create-product")
-    public ResponseEntity<Void> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Void> createProduct(@RequestBody ProductDto product) {
         return productService.createProduct(product)
                 .map(failure -> new ResponseEntity<Void>(responseStatuses.get(failure)))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.CREATED));
     }
 
     @GetMapping("/get-products")
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<ProductDto>> getProducts() {
         return ResponseEntity.ok().body(productService.getProducts());
     }
 }

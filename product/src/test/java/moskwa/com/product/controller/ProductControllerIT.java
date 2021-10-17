@@ -3,7 +3,7 @@ package moskwa.com.product.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import moskwa.com.product.ProductApplication;
 import moskwa.com.product.annotations.ProductAfter;
-import moskwa.com.product.model.Product;
+import moskwa.com.product.model.ProductDto;
 import moskwa.com.product.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ public class ProductControllerIT {
 
     @Test
     @ProductAfter
-    void shouldPersistCustomer() throws Exception {
-        Product product = Product.builder()
+    void shouldPersistProduct() throws Exception {
+        ProductDto product = ProductDto.builder()
                 .creditId(1L)
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
@@ -54,7 +54,7 @@ public class ProductControllerIT {
     @Test
     @ProductAfter
     void shouldReturnConflictWhenProductExists() throws Exception {
-        Product product = Product.builder()
+        ProductDto product = ProductDto.builder()
                 .creditId(1L)
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
@@ -77,7 +77,7 @@ public class ProductControllerIT {
 
     @Test
     void shouldReturnUnprocessableWhenProductIsInvalid() throws Exception {
-        Product product = Product.builder()
+        ProductDto product = ProductDto.builder()
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
                 .build();
@@ -93,13 +93,13 @@ public class ProductControllerIT {
     @Test
     @ProductAfter
     void shouldCreateTwoProductsAndReturnTwoProducts() throws Exception {
-        Product productOne = Product.builder()
+        ProductDto productOne = ProductDto.builder()
                 .creditId(1L)
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
                 .build();
 
-        Product productTwo = Product.builder()
+        ProductDto productTwo = ProductDto.builder()
                 .creditId(2L)
                 .productName("Credit 2")
                 .value(new BigDecimal(200))

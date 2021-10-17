@@ -16,7 +16,23 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class Product {
     @Id
-    private Long creditId;
+    private long creditId;
     private String productName;
     private BigDecimal value;
+
+    public static Product fromDto(ProductDto productDto) {
+        return Product.builder()
+                .creditId(productDto.getCreditId())
+                .productName(productDto.getProductName())
+                .value(productDto.getValue())
+                .build();
+    }
+
+    public ProductDto toDto() {
+        return ProductDto.builder()
+                .creditId(creditId)
+                .productName(productName)
+                .value(value)
+                .build();
+    }
 }

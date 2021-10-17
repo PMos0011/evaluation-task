@@ -3,7 +3,7 @@ package moskwa.com.customer.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import moskwa.com.customer.CustomerApplication;
 import moskwa.com.customer.annotations.CustomerAfter;
-import moskwa.com.customer.model.Customer;
+import moskwa.com.customer.model.CustomerDto;
 import moskwa.com.customer.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class CustomerControllerIT {
     @Test
     @CustomerAfter
     void shouldPersistCustomer() throws Exception {
-        Customer customer = Customer.builder()
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")
@@ -54,7 +54,7 @@ public class CustomerControllerIT {
     @Test
     @CustomerAfter
     void shouldReturnConflictWhenCustomerExists() throws Exception {
-        Customer customer = Customer.builder()
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")
@@ -76,7 +76,7 @@ public class CustomerControllerIT {
 
     @Test
     void shouldReturnUnprocessableWhenCustomerIsInvalid() throws Exception {
-        Customer customer = Customer.builder()
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .surname("Rambo")
                 .pesel("01234567890")
@@ -93,14 +93,14 @@ public class CustomerControllerIT {
     @Test
     @CustomerAfter
     void shouldCreateTwoCustomersAndReturnTwoCustomers() throws Exception {
-        Customer customerOne = Customer.builder()
+        CustomerDto customerOne = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")
                 .pesel("01234567890")
                 .build();
 
-        Customer customerTwo = Customer.builder()
+        CustomerDto customerTwo = CustomerDto.builder()
                 .creditId(2L)
                 .firstName("Rocky")
                 .surname("Balboa")
@@ -125,7 +125,7 @@ public class CustomerControllerIT {
 
     @Test
     void shouldRevertCustomer() throws Exception {
-        Customer customer = Customer.builder()
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")

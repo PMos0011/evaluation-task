@@ -1,6 +1,6 @@
 package moskwa.com.customer.utils;
 
-import moskwa.com.customer.model.Customer;
+import moskwa.com.customer.model.CustomerDto;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ValidationTest {
 
     @Test
-    void shouldReturnTrueWhenCustomerEntityIsValid(){
-        Customer customer = Customer.builder()
+    void shouldReturnTrueWhenCustomerEntityIsValid() {
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")
@@ -21,8 +21,8 @@ public class ValidationTest {
     }
 
     @Test
-    void shouldReturnFalseWhenCreditIdMissing(){
-        Customer customer = Customer.builder()
+    void shouldReturnFalseWhenCreditIdMissing() {
+        CustomerDto customer = CustomerDto.builder()
                 .firstName("John")
                 .surname("Rambo")
                 .pesel("01234567890")
@@ -32,8 +32,8 @@ public class ValidationTest {
     }
 
     @Test
-    void shouldReturnFalseWhenCustomerNameMissing(){
-        Customer customer = Customer.builder()
+    void shouldReturnFalseWhenCustomerNameMissing() {
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .surname("Rambo")
                 .pesel("01234567890")
@@ -43,8 +43,8 @@ public class ValidationTest {
     }
 
     @Test
-    void shouldReturnFalseWhenCustomerSurnameIsEmpty(){
-        Customer customer = Customer.builder()
+    void shouldReturnFalseWhenCustomerSurnameIsEmpty() {
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("   ")
@@ -55,8 +55,8 @@ public class ValidationTest {
     }
 
     @Test
-    void shouldReturnFalseWhenCustomerPESELisInvalid(){
-        Customer customer = Customer.builder()
+    void shouldReturnFalseWhenCustomerPESELisInvalid() {
+        CustomerDto customer = CustomerDto.builder()
                 .creditId(1L)
                 .firstName("John")
                 .surname("Rambo")

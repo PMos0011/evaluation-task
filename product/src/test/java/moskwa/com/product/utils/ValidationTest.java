@@ -1,6 +1,6 @@
 package moskwa.com.product.utils;
 
-import moskwa.com.product.model.Product;
+import moskwa.com.product.model.ProductDto;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ValidationTest {
     @Test
     void shouldReturnTrueWhenProductEntityIsValid() {
-        Product product = Product.builder()
+        ProductDto product = ProductDto.builder()
                 .creditId(1L)
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
@@ -22,7 +22,7 @@ public class ValidationTest {
 
     @Test
     void shouldReturnFalseWhenCreditIdMissing() {
-        Product product = Product.builder()
+        ProductDto product = ProductDto.builder()
                 .productName("Credit 1")
                 .value(new BigDecimal(100))
                 .build();
@@ -31,8 +31,8 @@ public class ValidationTest {
     }
 
     @Test
-    void shouldReturnFalseWhenProductNameIsempty() {
-        Product product = Product.builder()
+    void shouldReturnFalseWhenProductNameIsEmpty() {
+        ProductDto product = ProductDto.builder()
                 .creditId(1L)
                 .productName(" ")
                 .value(new BigDecimal(100))
@@ -43,7 +43,7 @@ public class ValidationTest {
 
     @Test
     void shouldReturnFalseWhenCProductValueMissing() {
-        Product product = Product.builder()
+        ProductDto product = ProductDto.builder()
                 .creditId(1L)
                 .productName(" ")
                 .build();

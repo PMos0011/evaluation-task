@@ -1,7 +1,7 @@
 package moskwa.com.customer.controller;
 
 import lombok.RequiredArgsConstructor;
-import moskwa.com.customer.model.Customer;
+import moskwa.com.customer.model.CustomerDto;
 import moskwa.com.customer.service.CustomerService;
 import moskwa.com.customer.service.CustomerServiceFailure;
 import org.springframework.http.HttpStatus;
@@ -23,19 +23,19 @@ public class CustomerController {
     );
 
     @PostMapping("/create-customer")
-    public ResponseEntity<Void> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<Void> createCustomer(@RequestBody CustomerDto customer) {
         return customerService.createCustomer(customer)
                 .map(failure -> new ResponseEntity<Void>(responseStatuses.get(failure)))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.CREATED));
     }
 
     @GetMapping("/get-customers")
-    public ResponseEntity<List<Customer>> getCustomers() {
+    public ResponseEntity<List<CustomerDto>> getCustomers() {
         return ResponseEntity.ok().body(customerService.getCustomers());
     }
 
     @DeleteMapping("/customer")
-    public ResponseEntity<Void> revert(@RequestBody Customer customer) {
+    public ResponseEntity<Void> revert(@RequestBody CustomerDto customer) {
         customerService.revert(customer);
         return ResponseEntity.ok().build();
     }
