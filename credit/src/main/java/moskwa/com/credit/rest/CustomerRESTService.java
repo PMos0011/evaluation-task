@@ -61,7 +61,7 @@ public class CustomerRESTService implements CustomerClient {
             HttpEntity<CustomerRESTDto> entity = new HttpEntity<>(customerRESTDto, headers);
             restTemplate.delete(url, entity, Void.class);
         } catch (HttpClientErrorException httpClientErrorException) {
-
+            // Here should be reverting error handling - omitted in evaluation task
             System.out.printf("Error while reverting customer with creditId: %d%n", customerRESTDto.getCreditId());
         }
     }

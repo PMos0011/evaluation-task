@@ -29,8 +29,8 @@ public class CreditController {
                         creditId -> new ResponseEntity<>(creditId, HttpStatus.CREATED));
     }
 
-    @GetMapping("/get-credit")
-    public ResponseEntity<List<CreditRequestDto>> getCredit() {
+    @GetMapping("/get-credits")
+    public ResponseEntity<List<CreditRequestDto>> getCredits() {
         return creditService.getCredits()
                 .map(creditRequestDtos -> new ResponseEntity<>(creditRequestDtos, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

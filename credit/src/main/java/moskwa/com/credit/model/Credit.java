@@ -1,5 +1,6 @@
 package moskwa.com.credit.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Credit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

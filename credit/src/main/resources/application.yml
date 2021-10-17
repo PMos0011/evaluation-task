@@ -34,8 +34,7 @@ spring:
             non_contextual_creation: true
     open-in-view: false
 
-
 connect-timeout: 10000
-read-timeout: 20000
+read-timeout: 10000
 customer-service-url: http://localhost:${customer-service-port}
 product-service-url: http://localhost:${product-service-port}

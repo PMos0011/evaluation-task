@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@AllArgsConstructor
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreditDto {
     @NotBlank
     private String creditName;

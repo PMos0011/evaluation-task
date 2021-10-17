@@ -4,6 +4,8 @@ db-user: sa
 db-pass: sa
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: evaluation-customer
     flyway:
@@ -27,3 +29,8 @@ spring:
         jdbc:
             non_contextual_creation: true
     open-in-view: false
+
+connect-timeout: 10000
+read-timeout: 10000
+customer-service-url: test
+product-service-url: test

@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import moskwa.com.credit.model.Credit;
 import moskwa.com.credit.model.dto.CreditRequestDto;
 import moskwa.com.credit.repository.CreditRepository;
-import moskwa.com.credit.rest.CustomerRESTService;
-import moskwa.com.credit.rest.ProductRESTService;
+import moskwa.com.credit.rest.CustomerClient;
+import moskwa.com.credit.rest.ProductClient;
 import moskwa.com.credit.model.dto.CustomerRESTDto;
 import moskwa.com.credit.model.dto.ProductRESTDto;
 import moskwa.com.credit.utils.CreditMapper;
@@ -26,8 +26,8 @@ public class CreditService {
 
     private final Validator validator;
     private final CreditRepository creditRepository;
-    private final CustomerRESTService customerRESTService;
-    private final ProductRESTService productRESTService;
+    private final CustomerClient customerClient;
+    private final ProductClient productClient;
     private final CreditMapper creditMapper;
 
     public Either<CreditServiceFailure, Long> createCredit(final CreditRequestDto requestDto) {
@@ -36,7 +36,7 @@ public class CreditService {
 
         Credit newCredit = creditRepository.save(new Credit(requestDto.getCredit().getCreditName()));
 
-        return customerRESTService.createCustomerOrGetFailure(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()))
+        return customerClient.createCustomerOrGetFailure(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()))
                 .<Either<CreditServiceFailure, Long>>map(creditServiceFailure -> {
                     creditRepository.delete(newCredit);
                     return Either.left(creditServiceFailure);
@@ -44,8 +44,8 @@ public class CreditService {
     }
 
     public Optional<List<CreditRequestDto>> getCredits() {
-        return customerRESTService.getCustomers()
-                .flatMap(customerRESTDtos -> productRESTService.getProducts()
+        return customerClient.getCustomers()
+                .flatMap(customerRESTDtos -> productClient.getProducts()
                         .flatMap(productRESTDtos ->
                                 resolveCreditRequestStos(creditRepository.findAll(), customerRESTDtos, productRESTDtos)));
     }
@@ -58,9 +58,9 @@ public class CreditService {
     }
 
     private Either<CreditServiceFailure, Long> createProductOrGetFailure(final Credit newCredit, final CreditRequestDto requestDto) {
-        return productRESTService.createProductOrGetFailure(ProductRESTDto.createRESTDto(newCredit.getId(), requestDto.getProduct()))
+        return productClient.createProductOrGetFailure(ProductRESTDto.createRESTDto(newCredit.getId(), requestDto.getProduct()))
                 .<Either<CreditServiceFailure, Long>>map(creditServiceFailure -> {
-                    customerRESTService.revertCreatedCustomer(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()));
+                    customerClient.revertCreatedCustomer(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()));
                     creditRepository.delete(newCredit);
                     return Either.left(creditServiceFailure);
                 }).orElseGet(() -> Either.right(newCredit.getId()));
