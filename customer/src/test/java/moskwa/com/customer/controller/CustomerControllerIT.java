@@ -14,10 +14,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -48,7 +48,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, customerRepository.findAll().size());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isConflict());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, customerRepository.findAll().size());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, customerRepository.findAll().size());
     }
 
 
@@ -104,7 +104,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, customerRepository.findAll().size());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, customerRepository.findAll().size());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, customerRepository.findAll().size());
     }
 
     @Test
@@ -187,13 +187,13 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, customerRepository.findAll().size());
 
         mockMvc.perform(delete("/customer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isOk());
 
-        assertThat(customerRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, customerRepository.findAll().size());
     }
 }

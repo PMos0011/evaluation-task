@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +49,7 @@ public class ProductControllerIT {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, productRepository.findAll().size());
     }
 
     @Test
@@ -65,14 +66,14 @@ public class ProductControllerIT {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, productRepository.findAll().size());
 
         mockMvc.perform(post("/create-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isConflict());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(1L);
+        assertEquals(1L, productRepository.findAll().size());
     }
 
     @Test
@@ -87,7 +88,7 @@ public class ProductControllerIT {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, productRepository.findAll().size());
     }
 
     @Test
@@ -102,7 +103,7 @@ public class ProductControllerIT {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, productRepository.findAll().size());
     }
 
     @Test
@@ -117,7 +118,7 @@ public class ProductControllerIT {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isUnprocessableEntity());
 
-        assertThat(productRepository.findAll().size()).isEqualTo(0L);
+        assertEquals(0L, productRepository.findAll().size());
     }
 
     @Test

@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import static moskwa.com.credit.CreditRequestDtoBuilder.createCreditRequestCreator;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,7 +39,7 @@ public class CreditControllerIT extends BaseIntegrationTest {
 
     @Test
     @CreditAfter
-    public void shouldPersistCredit() throws Exception {
+    public void shouldReturnCreditNumber() throws Exception {
         CreditRequestDto creditRequestDto = createCreditRequestCreator(1);
 
         mockMvc.perform(post("/create-credit")
@@ -83,8 +83,8 @@ public class CreditControllerIT extends BaseIntegrationTest {
 
         CreditRequestDto[] creditRequestDtos = objectMapper.readValue(response, CreditRequestDto[].class);
         for (CreditRequestDto creditRequestDto : creditRequestDtos) {
-            assertEquals(creditRequestDto.getCredit().getCreditName(), creditRequestDto.getCustomer().getSurname());
-            assertEquals(creditRequestDto.getCredit().getCreditName(), creditRequestDto.getProduct().getProductName());
+            assertThat(creditRequestDto.getCredit().getCreditName()).isEqualTo(creditRequestDto.getCustomer().getSurname());
+            assertThat(creditRequestDto.getCredit().getCreditName()).isEqualTo(creditRequestDto.getProduct().getProductName());
         }
     }
 

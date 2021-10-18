@@ -7,12 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
-@ContextConfiguration(classes = {CreditApplication.class, BaseIntegrationTest.ClientsConfiguration.class})
 @AutoConfigureMockMvc
-public class BaseIntegrationTest {
+@ContextConfiguration(classes = {CreditApplication.class, BaseIntegrationTest.ClientsConfiguration.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+public abstract class BaseIntegrationTest {
 
     @TestConfiguration
     public static class ClientsConfiguration {

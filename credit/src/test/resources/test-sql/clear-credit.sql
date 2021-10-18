@@ -1,1 +1,1 @@
-TRUNCATE TABLE credit RESTART IDENTITY;
+truncate table credit restart identity;
