@@ -21,12 +21,11 @@ import static moskwa.com.credit.service.CreditServiceFailure.PERSIST_FAILURE;
 @Component
 @RequiredArgsConstructor
 public class CustomerRESTService implements CustomerClient {
+    private final static String CREATE_CUSTOMER_ENDPOINT = "/create-customer";
+    private final static String GET_CUSTOMER_ENDPOINT = "/get-customers?ids=%s";
+
     @Value("${customer-service-url}")
     private String customerServiceUrl;
-    private final String CREATE_CUSTOMER_ENDPOINT = "/create-customer";
-    private final String GET_CUSTOMER_ENDPOINT = "/get-customers";
-    private final String DELETE_CUSTOMER_ENDPOINT = "/customer";
-
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
@@ -43,26 +42,14 @@ public class CustomerRESTService implements CustomerClient {
     }
 
     @Override
-    public Optional<List<CustomerRESTDto>> getCustomers() {
+    public Optional<List<CustomerRESTDto>> getCustomers(String ids) {
         try {
-            String url = customerServiceUrl.concat(GET_CUSTOMER_ENDPOINT);
+            String url = customerServiceUrl.concat(String.format(GET_CUSTOMER_ENDPOINT, ids));
             HttpEntity<CustomerRESTDto> entity = new HttpEntity<>(headers);
             return Optional.of(Arrays.stream(restTemplate.exchange(url, HttpMethod.GET, entity, CustomerRESTDto[].class).getBody())
                     .collect(Collectors.toList()));
         } catch (HttpClientErrorException httpClientErrorException) {
             return Optional.empty();
-        }
-    }
-
-    @Override
-    public void revertCreatedCustomer(CustomerRESTDto customerRESTDto) {
-        try {
-            String url = customerServiceUrl.concat(DELETE_CUSTOMER_ENDPOINT);
-            HttpEntity<CustomerRESTDto> entity = new HttpEntity<>(customerRESTDto, headers);
-            restTemplate.delete(url, entity, Void.class);
-        } catch (HttpClientErrorException httpClientErrorException) {
-            // Here should be reverting error handling - omitted in evaluation task
-            System.out.printf("Error while reverting customer with creditId: %d%n", customerRESTDto.getCreditId());
         }
     }
 }

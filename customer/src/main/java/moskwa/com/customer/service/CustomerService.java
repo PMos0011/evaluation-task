@@ -33,14 +33,10 @@ public class CustomerService {
                 });
     }
 
-    public List<CustomerDto> getCustomers() {
-        return customerRepository.findAll()
+    public List<CustomerDto> getCustomers(List<Long> creditIds) {
+        return customerRepository.findAllById(creditIds)
                 .stream()
                 .map(Customer::toDto)
                 .collect(Collectors.toList());
-    }
-
-    public void revert(final CustomerDto customer) {
-        customerRepository.delete(Customer.fromDto(customer));
     }
 }

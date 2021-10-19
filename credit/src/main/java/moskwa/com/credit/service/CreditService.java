@@ -17,12 +17,18 @@ import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static moskwa.com.credit.model.dto.CustomerRESTDto.createCustomerRestDTO;
+import static moskwa.com.credit.model.dto.ProductRESTDto.createProductRESTDto;
 import static moskwa.com.credit.service.CreditServiceFailure.VALIDATION_FAILURE;
 
 @Service
 @RequiredArgsConstructor
 public class CreditService {
+
+    private static final int CREDIT_NUMBER_DEFAULT_INCREMENT_VALUE = 1;
+    private static final long FIRST_CREDIT_NUMBER = 1L;
 
     private final Validator validator;
     private final CreditRepository creditRepository;
@@ -34,20 +40,33 @@ public class CreditService {
         if (!isRequestValid(requestDto))
             return Either.left(VALIDATION_FAILURE);
 
-        Credit newCredit = creditRepository.save(new Credit(requestDto.getCredit().getCreditName()));
+        final long creditNumber = creditRepository.getLastId()
+                .map(id -> id + CREDIT_NUMBER_DEFAULT_INCREMENT_VALUE)
+                .orElse(FIRST_CREDIT_NUMBER);
 
-        return customerClient.createCustomerOrGetFailure(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()))
-                .<Either<CreditServiceFailure, Long>>map(creditServiceFailure -> {
-                    creditRepository.delete(newCredit);
-                    return Either.left(creditServiceFailure);
-                }).orElseGet(() -> createProductOrGetFailure(newCredit, requestDto));
+        return productClient.createProductOrGetFailure(createProductRESTDto(creditNumber, requestDto.getProduct()))
+                .<Either<CreditServiceFailure, Long>>map(Either::left)
+                .orElseGet(() -> customerClient.createCustomerOrGetFailure(createCustomerRestDTO(creditNumber, requestDto.getCustomer()))
+                        .<Either<CreditServiceFailure, Long>>map(Either::left)
+                        .orElseGet(() -> {
+                            creditRepository.save(new Credit(creditNumber, requestDto.getCredit().getCreditName()));
+                            return Either.right(creditNumber);
+                        }));
     }
 
     public Optional<List<CreditRequestDto>> getCredits() {
-        return customerClient.getCustomers()
-                .flatMap(customerRESTDtos -> productClient.getProducts()
+        List<Credit> credits = creditRepository.findAll();
+        if (credits.size() == 0)
+            return Optional.of(new ArrayList<>());
+
+        final String ids = credits.stream()
+                .map(credit -> String.valueOf(credit.getId()))
+                .collect(Collectors.joining(","));
+
+        return customerClient.getCustomers(ids)
+                .flatMap(customerRESTDtos -> productClient.getProducts(ids)
                         .flatMap(productRESTDtos ->
-                                resolveCreditRequestStos(creditRepository.findAll(), customerRESTDtos, productRESTDtos)));
+                                resolveCreditRequestDtos(credits, customerRESTDtos, productRESTDtos)));
     }
 
     private boolean isRequestValid(final CreditRequestDto requestDto) {
@@ -57,16 +76,7 @@ public class CreditService {
                 && validator.validate(requestDto.getProduct()).isEmpty();
     }
 
-    private Either<CreditServiceFailure, Long> createProductOrGetFailure(final Credit newCredit, final CreditRequestDto requestDto) {
-        return productClient.createProductOrGetFailure(ProductRESTDto.createRESTDto(newCredit.getId(), requestDto.getProduct()))
-                .<Either<CreditServiceFailure, Long>>map(creditServiceFailure -> {
-                    customerClient.revertCreatedCustomer(CustomerRESTDto.createCustomerRestDTO(newCredit.getId(), requestDto.getCustomer()));
-                    creditRepository.delete(newCredit);
-                    return Either.left(creditServiceFailure);
-                }).orElseGet(() -> Either.right(newCredit.getId()));
-    }
-
-    private Optional<List<CreditRequestDto>> resolveCreditRequestStos(List<Credit> credits, List<CustomerRESTDto> customers, List<ProductRESTDto> products) {
+    private Optional<List<CreditRequestDto>> resolveCreditRequestDtos(List<Credit> credits, List<CustomerRESTDto> customers, List<ProductRESTDto> products) {
         List<CreditRequestDto> creditRequestDtos = new ArrayList<>();
         credits.forEach(credit ->
                 creditMapper.mapToCreditRequestDto(credit, customers, products).ifPresent(creditRequestDtos::add)

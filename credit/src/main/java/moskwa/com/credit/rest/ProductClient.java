@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface ProductClient {
     Optional<CreditServiceFailure> createProductOrGetFailure(ProductRESTDto productRESTDto);
 
-    Optional<List<ProductRESTDto>> getProducts();
+    Optional<List<ProductRESTDto>> getProducts(String ids);
 }

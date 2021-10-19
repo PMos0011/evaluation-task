@@ -12,7 +12,7 @@ public class ProductRESTDto {
     private final String productName;
     private final BigDecimal value;
 
-    public static ProductRESTDto createRESTDto(long creditId, ProductDto productDto) {
+    public static ProductRESTDto createProductRESTDto(long creditId, ProductDto productDto) {
         return ProductRESTDto.builder()
                 .creditId(creditId)
                 .productName(productDto.getProductName())

@@ -17,11 +17,7 @@ public class TestCustomerRESTService implements CustomerClient {
     }
 
     @Override
-    public Optional<List<CustomerRESTDto>> getCustomers() {
+    public Optional<List<CustomerRESTDto>> getCustomers(String ids) {
         return Optional.of(customers);
-    }
-
-    @Override
-    public void revertCreatedCustomer(CustomerRESTDto customerRESTDto) {
     }
 }

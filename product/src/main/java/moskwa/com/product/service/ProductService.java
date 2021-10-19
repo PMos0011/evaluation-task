@@ -33,8 +33,8 @@ public class ProductService {
                 });
     }
 
-    public List<ProductDto> getProducts() {
-        return productRepository.findAll()
+    public List<ProductDto> getProducts(List<Long> creditIds) {
+        return productRepository.findAllById(creditIds)
                 .stream()
                 .map(Product::toDto)
                 .collect(Collectors.toList());

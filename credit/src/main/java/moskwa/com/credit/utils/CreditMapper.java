@@ -29,13 +29,13 @@ public class CreditMapper {
         return Optional.empty();
     }
 
-    private Optional<CustomerDto> resolveCustomer(List<CustomerRESTDto> customers, long creditId) {
+    private Optional<CustomerDto> resolveCustomer(List<CustomerRESTDto> customers, final long creditId) {
         return customers.stream().filter(customer -> customer.getCreditId() == creditId)
                 .findFirst()
                 .map(CustomerRESTDto::toDto);
     }
 
-    private Optional<ProductDto> resolveProduct(List<ProductRESTDto> products, long creditId) {
+    private Optional<ProductDto> resolveProduct(List<ProductRESTDto> products, final long creditId) {
         return products.stream().filter(product -> product.getCreditId() == creditId)
                 .findFirst()
                 .map(ProductRESTDto::toDto);

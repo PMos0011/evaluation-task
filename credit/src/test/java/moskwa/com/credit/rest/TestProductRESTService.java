@@ -17,7 +17,7 @@ public class TestProductRESTService implements ProductClient {
     }
 
     @Override
-    public Optional<List<ProductRESTDto>> getProducts() {
+    public Optional<List<ProductRESTDto>> getProducts(String ids) {
         return Optional.of(productRESTDtos);
     }
 }

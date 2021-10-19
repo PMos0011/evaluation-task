@@ -4,7 +4,8 @@ product-service-port: 37002
 
 db-host: localhost
 db-port: 5432
-db-name: credit_db
+db-name: postgres
+db-schema: credit_schem
 db-user: credit_user
 db-pass: credit_pass
 
@@ -19,7 +20,7 @@ spring:
   datasource:
     username: ${db-user}
     password: ${db-pass}
-    url: jdbc:postgresql://${db-host}:${db-port}/${db-name}
+    url: jdbc:postgresql://${db-host}:${db-port}/${db-name}?currentSchema=${db-schema}
     driver-class-name: org.postgresql.Driver
     platform: postgres
   jpa:

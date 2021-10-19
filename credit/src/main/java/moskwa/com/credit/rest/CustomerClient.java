@@ -9,7 +9,5 @@ import java.util.Optional;
 public interface CustomerClient {
     Optional<CreditServiceFailure> createCustomerOrGetFailure(CustomerRESTDto customerRESTDto);
 
-   Optional<List<CustomerRESTDto>> getCustomers();
-
-    void revertCreatedCustomer(CustomerRESTDto customerRESTDto);
+    Optional<List<CustomerRESTDto>> getCustomers(String ids);
 }

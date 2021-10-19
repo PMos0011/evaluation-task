@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/get-products")
-    public ResponseEntity<List<ProductDto>> getProducts() {
-        return ResponseEntity.ok().body(productService.getProducts());
+    public ResponseEntity<List<ProductDto>> getProducts(@RequestParam(value = "ids") List<Long> creditIds) {
+        return ResponseEntity.ok().body(productService.getProducts(creditIds));
     }
 }

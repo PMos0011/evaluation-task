@@ -14,8 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import static moskwa.com.credit.CreditRequestDtoBuilder.createCreditRequestCreator;
+import static moskwa.com.credit.CreditRequestDtoBuilder.createCreditRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,7 +41,7 @@ public class CreditControllerIT extends BaseIntegrationTest {
     @Test
     @CreditAfter
     public void shouldReturnCreditNumber() throws Exception {
-        CreditRequestDto creditRequestDto = createCreditRequestCreator(1);
+        CreditRequestDto creditRequestDto = createCreditRequestDto(1);
 
         mockMvc.perform(post("/create-credit")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -50,11 +51,21 @@ public class CreditControllerIT extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldReturnEmptyList() throws Exception {
+        CreditRequestDto creditRequestDto = createCreditRequestDto(1);
+
+       mockMvc.perform(get("/get-credits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     @CreditAfter
     public void shouldPersistThreeCreditsAndReturnThreeCredits() throws Exception {
-        CreditRequestDto creditRequestDtoOne = createCreditRequestCreator(1);
-        CreditRequestDto creditRequestDtoTwo = createCreditRequestCreator(2);
-        CreditRequestDto creditRequestDtoThree = createCreditRequestCreator(3);
+        CreditRequestDto creditRequestDtoOne = createCreditRequestDto(1);
+        CreditRequestDto creditRequestDtoTwo = createCreditRequestDto(2);
+        CreditRequestDto creditRequestDtoThree = createCreditRequestDto(3);
 
         mockMvc.perform(post("/create-credit")
                         .contentType(MediaType.APPLICATION_JSON)

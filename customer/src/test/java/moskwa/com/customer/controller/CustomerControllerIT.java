@@ -167,33 +167,9 @@ public class CustomerControllerIT {
                         .content(objectMapper.writeValueAsString(customerTwo)))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/get-customers")
+        mockMvc.perform(get("/get-customers?ids=1,2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
-    }
-
-    @Test
-    void shouldRevertCustomer() throws Exception {
-        CustomerDto customer = CustomerDto.builder()
-                .creditId(1L)
-                .firstName("John")
-                .surname("Rambo")
-                .pesel("01234567890")
-                .build();
-
-        mockMvc.perform(post("/create-customer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(customer)))
-                .andExpect(status().isCreated());
-
-        assertEquals(1L, customerRepository.findAll().size());
-
-        mockMvc.perform(delete("/customer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(customer)))
-                .andExpect(status().isOk());
-
-        assertEquals(0L, customerRepository.findAll().size());
     }
 }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public class CreditRequestDtoBuilder {
 
-    public static CreditRequestDto createCreditRequestCreator(final int number) {
+    public static CreditRequestDto createCreditRequestDto(final int number) {
         return CreditRequestDto.builder()
                 .credit(new CreditDto(String.format("CommonName_%d", number)))
                 .customer(CustomerDto.builder()

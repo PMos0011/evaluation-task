@@ -22,11 +22,11 @@ import static moskwa.com.credit.service.CreditServiceFailure.PERSIST_FAILURE;
 @Component
 @RequiredArgsConstructor
 public class ProductRESTService implements ProductClient {
+    private final static String CREATE_PRODUCT_ENDPOINT = "/create-product";
+    private final static String GET_PRODUCTS_ENDPOINT = "/get-products?ids=%s";
+
     @Value("${product-service-url}")
     private String productServiceUrl;
-    private final String CREATE_PRODUCT_ENDPOINT = "/create-product";
-    private final String GET_PRODUCTS_ENDPOINT = "/get-products";
-
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
@@ -43,9 +43,9 @@ public class ProductRESTService implements ProductClient {
     }
 
     @Override
-    public Optional<List<ProductRESTDto>> getProducts() {
+    public Optional<List<ProductRESTDto>> getProducts(String ids) {
         try {
-            String url = productServiceUrl.concat(GET_PRODUCTS_ENDPOINT);
+            String url = productServiceUrl.concat(String.format(GET_PRODUCTS_ENDPOINT, ids));
             HttpEntity<CustomerRESTDto> entity = new HttpEntity<>(headers);
             return Optional.of(Arrays.stream(restTemplate.exchange(url, HttpMethod.GET, entity, ProductRESTDto[].class).getBody())
                     .collect(Collectors.toList()));

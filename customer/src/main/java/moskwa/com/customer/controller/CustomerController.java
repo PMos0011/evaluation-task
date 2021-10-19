@@ -30,13 +30,7 @@ public class CustomerController {
     }
 
     @GetMapping("/get-customers")
-    public ResponseEntity<List<CustomerDto>> getCustomers() {
-        return ResponseEntity.ok().body(customerService.getCustomers());
-    }
-
-    @DeleteMapping("/customer")
-    public ResponseEntity<Void> revert(@RequestBody CustomerDto customer) {
-        customerService.revert(customer);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<CustomerDto>> getCustomers(@RequestParam(value = "ids") List<Long> creditIds) {
+        return ResponseEntity.ok().body(customerService.getCustomers(creditIds));
     }
 }

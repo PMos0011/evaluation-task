@@ -2,7 +2,6 @@ package moskwa.com.credit.service;
 
 import io.vavr.control.Either;
 import moskwa.com.credit.BaseIntegrationTest;
-import moskwa.com.credit.CreditRequestDtoBuilder;
 import moskwa.com.credit.annotations.CreditAfter;
 import moskwa.com.credit.annotations.CreditInit;
 import moskwa.com.credit.model.dto.CreditRequestDto;
@@ -25,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static moskwa.com.credit.CreditRequestDtoBuilder.createCreditRequestDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -65,7 +65,7 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditAfter
     public void shouldReturnCreditNumber() {
-        CreditRequestDto creditRequestDto = CreditRequestDtoBuilder.createCreditRequestCreator(1);
+        CreditRequestDto creditRequestDto = createCreditRequestDto(1);
 
         when(customerClient.createCustomerOrGetFailure(any(CustomerRESTDto.class))).thenReturn(Optional.empty());
         when(productClient.createProductOrGetFailure(any(ProductRESTDto.class))).thenReturn(Optional.empty());
@@ -81,19 +81,19 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @CreditAfter
     public void shouldReturnCredits() {
         List<CustomerRESTDto> customersFromService = Stream.of(
-                CustomerRESTDto.createCustomerRestDTO(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getCustomer())
+                CustomerRESTDto.createCustomerRestDTO(1L, createCreditRequestDto(1).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(2L, createCreditRequestDto(2).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(3L, createCreditRequestDto(3).getCustomer())
         ).collect(Collectors.toList());
 
         List<ProductRESTDto> productsFromCService = Stream.of(
-                ProductRESTDto.createRESTDto(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getProduct()),
-                ProductRESTDto.createRESTDto(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getProduct()),
-                ProductRESTDto.createRESTDto(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getProduct())
+                ProductRESTDto.createProductRESTDto(3L, createCreditRequestDto(3).getProduct()),
+                ProductRESTDto.createProductRESTDto(2L, createCreditRequestDto(2).getProduct()),
+                ProductRESTDto.createProductRESTDto(1L, createCreditRequestDto(1).getProduct())
         ).collect(Collectors.toList());
 
-        when(customerClient.getCustomers()).thenReturn(Optional.of(customersFromService));
-        when(productClient.getProducts()).thenReturn(Optional.of(productsFromCService));
+        when(customerClient.getCustomers(any(String.class))).thenReturn(Optional.of(customersFromService));
+        when(productClient.getProducts(any(String.class))).thenReturn(Optional.of(productsFromCService));
 
         Optional<List<CreditRequestDto>> result = creditService.getCredits();
 
@@ -109,7 +109,7 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditAfter
     public void shouldNotPersistCreditOnCustomerClientFailureAndReturnPersistFailure() {
-        CreditRequestDto creditRequestDto = CreditRequestDtoBuilder.createCreditRequestCreator(1);
+        CreditRequestDto creditRequestDto = createCreditRequestDto(1);
 
         when(customerClient.createCustomerOrGetFailure(any(CustomerRESTDto.class)))
                 .thenReturn(Optional.of(CreditServiceFailure.PERSIST_FAILURE));
@@ -124,7 +124,7 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditAfter
     public void shouldNotPersistCreditOnProductClientFailureAndReturnPersistFailure() {
-        CreditRequestDto creditRequestDto = CreditRequestDtoBuilder.createCreditRequestCreator(1);
+        CreditRequestDto creditRequestDto = createCreditRequestDto(1);
 
         when(customerClient.createCustomerOrGetFailure(any(CustomerRESTDto.class))).thenReturn(Optional.empty());
         when(productClient.createProductOrGetFailure(any(ProductRESTDto.class))).thenReturn(Optional.of(CreditServiceFailure.PERSIST_FAILURE));
@@ -139,20 +139,20 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditInit
     @CreditAfter
-    public void shouldReturnOptionalEmptyWhenMissingCustomerData(){
+    public void shouldReturnOptionalEmptyWhenMissingCustomerData() {
         List<CustomerRESTDto> customersFromService = Stream.of(
-                CustomerRESTDto.createCustomerRestDTO(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getCustomer())
+                CustomerRESTDto.createCustomerRestDTO(1L, createCreditRequestDto(1).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(2L, createCreditRequestDto(2).getCustomer())
         ).collect(Collectors.toList());
 
         List<ProductRESTDto> productsFromCService = Stream.of(
-                ProductRESTDto.createRESTDto(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getProduct()),
-                ProductRESTDto.createRESTDto(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getProduct()),
-                ProductRESTDto.createRESTDto(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getProduct())
+                ProductRESTDto.createProductRESTDto(3L, createCreditRequestDto(3).getProduct()),
+                ProductRESTDto.createProductRESTDto(2L, createCreditRequestDto(2).getProduct()),
+                ProductRESTDto.createProductRESTDto(1L, createCreditRequestDto(1).getProduct())
         ).collect(Collectors.toList());
 
-        when(customerClient.getCustomers()).thenReturn(Optional.of(customersFromService));
-        when(productClient.getProducts()).thenReturn(Optional.of(productsFromCService));
+        when(customerClient.getCustomers(any(String.class))).thenReturn(Optional.of(customersFromService));
+        when(productClient.getProducts(any(String.class))).thenReturn(Optional.of(productsFromCService));
 
         Optional<List<CreditRequestDto>> result = creditService.getCredits();
 
@@ -162,20 +162,20 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditInit
     @CreditAfter
-    public void shouldReturnOptionalEmptyWhenMissingProductData(){
+    public void shouldReturnOptionalEmptyWhenMissingProductData() {
         List<CustomerRESTDto> customersFromService = Stream.of(
-                CustomerRESTDto.createCustomerRestDTO(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getCustomer())
+                CustomerRESTDto.createCustomerRestDTO(1L, createCreditRequestDto(1).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(2L, createCreditRequestDto(2).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(3L, createCreditRequestDto(3).getCustomer())
         ).collect(Collectors.toList());
 
         List<ProductRESTDto> productsFromCService = Stream.of(
-                ProductRESTDto.createRESTDto(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getProduct()),
-                ProductRESTDto.createRESTDto(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getProduct())
+                ProductRESTDto.createProductRESTDto(3L, createCreditRequestDto(3).getProduct()),
+                ProductRESTDto.createProductRESTDto(2L, createCreditRequestDto(2).getProduct())
         ).collect(Collectors.toList());
 
-        when(customerClient.getCustomers()).thenReturn(Optional.of(customersFromService));
-        when(productClient.getProducts()).thenReturn(Optional.of(productsFromCService));
+        when(customerClient.getCustomers(any(String.class))).thenReturn(Optional.of(customersFromService));
+        when(productClient.getProducts(any(String.class))).thenReturn(Optional.of(productsFromCService));
 
         Optional<List<CreditRequestDto>> result = creditService.getCredits();
 
@@ -185,15 +185,15 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditInit
     @CreditAfter
-    public void shouldReturnOptionalEmptyOnCustomerClientFailure(){
+    public void shouldReturnOptionalEmptyOnCustomerClientFailure() {
         List<ProductRESTDto> productsFromCService = Stream.of(
-                ProductRESTDto.createRESTDto(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getProduct()),
-                ProductRESTDto.createRESTDto(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getProduct()),
-                ProductRESTDto.createRESTDto(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getProduct())
+                ProductRESTDto.createProductRESTDto(3L, createCreditRequestDto(3).getProduct()),
+                ProductRESTDto.createProductRESTDto(2L, createCreditRequestDto(2).getProduct()),
+                ProductRESTDto.createProductRESTDto(1L, createCreditRequestDto(1).getProduct())
         ).collect(Collectors.toList());
 
-        when(customerClient.getCustomers()).thenReturn(Optional.empty());
-        when(productClient.getProducts()).thenReturn(Optional.of(productsFromCService));
+        when(customerClient.getCustomers(any(String.class))).thenReturn(Optional.empty());
+        when(productClient.getProducts(any(String.class))).thenReturn(Optional.of(productsFromCService));
 
         Optional<List<CreditRequestDto>> result = creditService.getCredits();
 
@@ -203,15 +203,15 @@ public class CreditServiceIT extends BaseIntegrationTest {
     @Test
     @CreditInit
     @CreditAfter
-    public void shouldReturnOptionalEmptyOnProductClientFailure(){
+    public void shouldReturnOptionalEmptyOnProductClientFailure() {
         List<CustomerRESTDto> customersFromService = Stream.of(
-                CustomerRESTDto.createCustomerRestDTO(1L, CreditRequestDtoBuilder.createCreditRequestCreator(1).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(2L, CreditRequestDtoBuilder.createCreditRequestCreator(2).getCustomer()),
-                CustomerRESTDto.createCustomerRestDTO(3L, CreditRequestDtoBuilder.createCreditRequestCreator(3).getCustomer())
+                CustomerRESTDto.createCustomerRestDTO(1L, createCreditRequestDto(1).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(2L, createCreditRequestDto(2).getCustomer()),
+                CustomerRESTDto.createCustomerRestDTO(3L, createCreditRequestDto(3).getCustomer())
         ).collect(Collectors.toList());
 
-        when(customerClient.getCustomers()).thenReturn(Optional.of(customersFromService));
-        when(productClient.getProducts()).thenReturn(Optional.empty());
+        when(customerClient.getCustomers(any(String.class))).thenReturn(Optional.of(customersFromService));
+        when(productClient.getProducts(any(String.class))).thenReturn(Optional.empty());
 
         Optional<List<CreditRequestDto>> result = creditService.getCredits();
 
