@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Credit {
+public class Credit extends AbstractBaseEntity {
     @Id
     private long id;
     private String creditName;

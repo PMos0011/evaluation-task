@@ -1,11 +1,13 @@
-server-port: 37000
-customer-service-port: 37001
-product-service-port: 37002
+server-port: 30000
+customer-service-service-port: 30001
+product-service-service-port: 30002
+customer-service-service-host: localhost
+product-service-service-host: localhost
 
-db-host: localhost
+db-host: ${PG_HOST:localhost}
 db-port: 5432
-db-name: postgres
-db-schema: credit_schem
+db-name: evaluation_db
+db-schema: credit_schema
 db-user: credit_user
 db-pass: credit_pass
 
@@ -14,7 +16,7 @@ server:
 
 spring:
   application:
-    name: evaluation-credit
+    name: credit
   flyway:
     baseline-on-migrate: true
   datasource:
@@ -37,5 +39,5 @@ spring:
 
 connect-timeout: 10000
 read-timeout: 10000
-customer-service-url: http://localhost:${customer-service-port}
-product-service-url: http://localhost:${product-service-port}
+customer-service-url: http://${customer-service-service-host}:${customer-service-service-port}
+product-service-url: http://${product-service-service-host}:${product-service-service-port}

@@ -5,7 +5,7 @@ db-pass: sa
 
 spring:
   application:
-    name: evaluation-product
+    name: product
     flyway:
       validate-on-migrate: true
     profiles:

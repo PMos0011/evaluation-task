@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class CreditServiceIT extends BaseIntegrationTest {
+public class CreditServiceIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private Validator validator;

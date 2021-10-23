@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {ProductApplication.class})
-public class ProductControllerIT {
+public class ProductControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 

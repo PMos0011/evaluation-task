@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class Customer extends AbstractBaseEntity {
     @Id
     private long creditId;
     private String firstName;

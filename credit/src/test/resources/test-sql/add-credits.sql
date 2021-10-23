@@ -1,3 +1,3 @@
-insert into credit (id, credit_name) values (1, 'CommonName_1');
-insert into credit (id, credit_name) values (2, 'CommonName_2');
-insert into credit (id, credit_name) values (3, 'CommonName_3');
+insert into credit (id, credit_name, created) values (1, 'CommonName_1', now());
+insert into credit (id, credit_name, created) values (2, 'CommonName_2', now());
+insert into credit (id, credit_name, created) values (3, 'CommonName_3', now());

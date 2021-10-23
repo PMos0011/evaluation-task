@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product extends AbstractBaseEntity{
     @Id
     private long creditId;
     private String productName;

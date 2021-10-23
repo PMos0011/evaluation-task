@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  postgres-url: postgres-service
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      volumes:
+        - name: db-init-volume
+          configMap:
+            name: db-init
+            defaultMode: 0777
+      containers:
+        - name: postgres-db
+          image: postgres
+          volumeMounts:
+            - mountPath: /custom-script
+              name: db-init-volume
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash","-c","sleep 5 && ./custom-script/db-init.sh -c"]
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: evaluation_db
+            - name: POSTGRES_USER
+              value: evaluation_admin_user
+            - name: POSTGRES_PASSWORD
+              value: evaluation_admin_pass
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+

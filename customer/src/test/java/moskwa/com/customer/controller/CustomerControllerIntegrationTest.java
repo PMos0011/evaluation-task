@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {CustomerApplication.class})
-public class CustomerControllerIT {
+public class CustomerControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 

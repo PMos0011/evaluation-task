@@ -1,9 +1,9 @@
-server-port: 37001
+server-port: 30001
 
-db-host: localhost
+db-host: ${PG_HOST:localhost}
 db-port: 5432
-db-name: postgres
-db-schema: customer_schem
+db-name: evaluation_db
+db-schema: customer_schema
 db-user: customer_user
 db-pass: customer_pass
 
@@ -12,7 +12,7 @@ server:
 
 spring:
   application:
-    name: evaluation-customer
+    name: customer
   flyway:
     baseline-on-migrate: true
   datasource:

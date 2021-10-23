@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>moskwa.com</groupId>
 	<artifactId>credit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>credit</name>
 	<description>Evaluation task</description>
 	<properties>
@@ -59,6 +59,16 @@
 			<version>0.10.4</version>
 		</dependency>
 		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -94,5 +104,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
