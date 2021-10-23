@@ -1,7 +1,7 @@
 Credit data storage system
 ===
 
-### Description of project
+### Description of system
 
 The system is responsible for the following functionalities:
 * creating credit data
@@ -50,7 +50,7 @@ Endpoint **GET /get-credits** returns all available credit data.
 
 Endpoints require application/json content type.
 
-Detailed information are available on swagger API page at **host-address:30000/swagger-ui.html**.
+Detailed information is available on swagger API page at **host-address:30000/swagger-ui.html**.
 
 ### Requirements
 * Java 11
